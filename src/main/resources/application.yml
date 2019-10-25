@@ -1,17 +1,43 @@
-#数据库连接配置信息
+# 数据库连接配置信息
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/shijie?useUnicode=true&characterEncoding=utf8
-    data-username: shijie
-    password: shijie
-    dbcp2:
-      min-idle: 5 #数据库连接池的最小维持连接数
-      initial-size: 5 #初始化提供的连接数
-      max-idle: 10  #最大的连接数
-      max-wait-millis: 2000  #等待连接获取的最大超时时间
+    type: com.alibaba.druid.pool.DruidDataSource # Druid连接池
+    driver-class-name: com.mysql.cj.jdbc.Driver # mysql驱动
+    # mysql连接，
+    # useUnicode=true&characterEncoding=utf8 用来指定编码格式为utf8
+    # serverTimezone=UTC 用来指定区时，springboot 2.0如果不配置这个会报时区错误;
+    # 在设定时区的时候，如果设定serverTimezone=UTC，会比中国时间早8个小时，
+    # 如果在中国，可以选择Asia/Shanghai或者Asia/Hongkong
+    # useSSL=false/true 是否使用ssl连接
+    url: jdbc:mysql://127.0.0.1:3306/shijie?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&&useSSL=false
+    username: root # 用户名
+    password: root # 密码 如果密码是纯数字，.yml文件需要加引号
+    # 数据源其他配置
+    # 虽然我们配置了druid连接池的其它属性，但是不会生效。
+    # 因为默认是使用的java.sql.Datasource的类来获取属性的，有些属性datasource没有。
+    # 如果我们想让配置生效，需要手动创建Druid的配置文件。
+    initialSize: 5 # 初始化提供的连接数
+    minIdle: 5 # 数据库连接池的最小维持连接数
+    maxIdle: 10 # 最大的连接数
+    maxActive: 20
+    maxWait: 60000 # 等待连接获取的最大超时时间
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 server:
-  port: 8888 #端口
+  port: 8888 # 端口
   servlet:
-    context-path: /shijie  #上下文
+    context-path: /shijie  # 上下文
+# mybatis配置
+mybatis:
+  type-aliases-package: cn.yanpeng.shijie.pojo # mybatis类别名
+  mapper-locations: mapper/*.xml # 配置文件路径

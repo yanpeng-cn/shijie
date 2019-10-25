@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.yanpeng.shijie.mapper.DocumentMapper" >
+  <resultMap id="BaseResultMap" type="cn.yanpeng.shijie.pojo.Document" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="doc_name" property="docName" jdbcType="VARCHAR" />
+    <result column="doc_type" property="docType" jdbcType="VARCHAR" />
+    <result column="doc_link" property="docLink" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sj_document
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="Document" >
+    insert into sj_document (id, doc_name, doc_type, 
+      doc_link, createtime, updatetime, 
+      status)
+    values (#{id,jdbcType=BIGINT}, #{docName,jdbcType=VARCHAR}, #{docType,jdbcType=VARCHAR}, 
+      #{docLink,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="Document" >
+    update sj_document
+    set doc_name = #{docName,jdbcType=VARCHAR},
+      doc_type = #{docType,jdbcType=VARCHAR},
+      doc_link = #{docLink,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, doc_name, doc_type, doc_link, createtime, updatetime, status
+    from sj_document
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, doc_name, doc_type, doc_link, createtime, updatetime, status
+    from sj_document
+  </select>
+</mapper>
